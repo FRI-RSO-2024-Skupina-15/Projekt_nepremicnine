@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: projekt-nepremicnine
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: projekt-nepremicnine
+  template:
+    metadata:
+      labels:
+        app: projekt-nepremicnine
+    spec:
+      containers:
+      - name: projekt-nepremicnine
+        image: kristofzupan/projekt-nepremicnine:latest
+        ports:
+        - containerPort: 3000
