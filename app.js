@@ -9,7 +9,7 @@ app.use(cors());
 
 const properties = [
     { id: 1, name: "Cozy Apartment", location: "New York", price: 1200 },
-    { id: 2, name: "Luxury Villa", location: "Los Angeles", price: 4500 },
+    { id: 2, name: "Luxury Villa", location: "Los Angeles!!!!!", price: 4500 },
     { id: 3, name: "Beach House", location: "Miami", price: 2500 }
 ];
 
