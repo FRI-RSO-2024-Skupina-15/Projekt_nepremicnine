@@ -12,8 +12,8 @@ env:
   RESOURCE_GROUP: "projektNepremicnineResourceGroup"
   CLUSTER_NAME: "projektNepremicnineCluster"
   DEPLOYMENT_MANIFEST_PATH: |
-    deployment.yaml
-    service.yaml
+    ./deployment.yaml
+    ./service.yaml
 
 jobs:
   build:
