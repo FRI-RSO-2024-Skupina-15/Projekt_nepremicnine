@@ -12,8 +12,8 @@ env:
   RESOURCE_GROUP: "projektNepremicnineResourceGroup"
   CLUSTER_NAME: "projektNepremicnineCluster"
   DEPLOYMENT_MANIFEST_PATH: |
-    k8s/deployment.yaml
-    k8s/service.yaml
+    deployment.yaml
+    service.yaml
 
 jobs:
   build:
@@ -88,10 +88,10 @@ jobs:
           use-kubelogin: 'true'
 
       # Step 5: Deploy application to AKS
-  #    - name: Deploy to AKS
-  #      uses: Azure/k8s-deploy@v4
-  #      with:
-  #        action: deploy
-  #        manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
-  #        images: |
-  #          ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
+      - name: Deploy to AKS
+        uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
+          images: |
+            ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
