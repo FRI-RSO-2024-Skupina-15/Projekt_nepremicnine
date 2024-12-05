@@ -3,8 +3,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const Property = require('./models/property');
+require('dotenv').config();
 
-const mongo_uri = 'mongodb+srv://kristofzupan00:yN25gGAVnEP8FuIc@projekt-nepremicnine.sy8ia.mongodb.net';
+const mongo_uri = process.env.MONGO_URI;
 
 const app = express();
 app.use(bodyParser.json());
@@ -50,14 +51,20 @@ mongoose.connect(mongo_uri).then(() => {
   console.log('MongoDB connection error:', err);
 });*/
 
-const properties = [
-    { id: 1, name: "Cozy Apartment", location: "New York", price: 1200 },
-    { id: 2, name: "Luxury Villa", location: "Los Angeles!!!!!", price: 4500 },
-    { id: 3, name: "Beach House", location: "Miami!!!!", price: 2500 }
-];
-
 app.get('/properties', (req, res) => {
-    Property.find({})
+    const { minPrice, maxPrice, minArea, maxArea, bedrooms, bathrooms, type } = req.query;
+
+    // Build the filter object based on provided parameters
+    const filter = {};
+    if (minPrice) filter.price = { $gte: minPrice };
+    if (maxPrice) filter.price = { ...filter.price, $lte: maxPrice };
+    if (minArea) filter.size = { $gte: minArea };
+    if (maxArea) filter.size = { ...filter.size, $lte: maxArea };
+    if (bedrooms) filter.bedrooms = bedrooms;
+    if (bathrooms) filter.bathrooms = bathrooms;
+    if (type) filter.type = type;
+
+    Property.find(filter)
     .then((properties) => {
       res.json(properties); // Send the retrieved properties as JSON response
     })
@@ -66,6 +73,69 @@ app.get('/properties', (req, res) => {
       res.status(500).send('Error retrieving properties'); // Handle errors
     });
 });
+
+/*
+app.post('/property', async (req, res) => {
+    try {
+        const {
+            price,
+            type,
+            location,
+            size,
+            plotSize,
+            floors,
+            bedrooms,
+            bathrooms,
+            toilets,
+            constructionYear,
+            renovationYear,
+            energyRating,
+            parkingSpaces,
+            amenities,
+            contact
+        } = req.body;
+
+        // Validate required fields
+        if (!price || !type || !location || !size || !bedrooms || !contact) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        // Validate nested fields
+        if (!location.city || !location.country) {
+            return res.status(400).json({ message: 'Location must include city and country' });
+        }
+        if (!contact.name || !contact.email || !contact.phone) {
+            return res.status(400).json({ message: 'Contact must include name, email, and phone' });
+        }
+
+        // Create a new property instance
+        const newProperty = new Property({
+            price,
+            type,
+            location,
+            size,
+            plotSize,
+            floors,
+            bedrooms,
+            bathrooms,
+            toilets,
+            constructionYear,
+            renovationYear,
+            energyRating,
+            parkingSpaces,
+            amenities,
+            contact
+        });
+
+        // Save to the database
+        await newProperty.save();
+        console.log('New property saved');
+        res.status(201).json({ message: 'Property created successfully', property: newProperty });
+    } catch (err) {
+        console.error('Error saving property:', err);
+        res.status(500).json({ message: 'Error creating property', error: err.message });
+    }
+});*/
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
