@@ -97,6 +97,6 @@ jobs:
           manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
           images: |
             ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
-          env:
-            - name: MONGO_URI
-              vlaue: ${{ secrets.MONGO_URI }}
+      #    env:
+      #      - name: MONGO_URI
+      #        vlaue: ${{ secrets.MONGO_URI }}
