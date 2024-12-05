@@ -11,6 +11,10 @@ RUN npm install
 # Copy app source code
 COPY . .
 
+# Accept build arguments and pass them to environment
+ARG MONGO_URI
+ENV MONGO_URI=${MONGO_URI}
+
 # Expose the app port
 EXPOSE 3000
 

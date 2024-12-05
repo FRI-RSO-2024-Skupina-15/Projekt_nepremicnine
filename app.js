@@ -7,6 +7,8 @@ require('dotenv').config();
 
 const mongo_uri = process.env.MONGO_URI;
 
+console.log("MONGO URI:", mongo_uri)
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
