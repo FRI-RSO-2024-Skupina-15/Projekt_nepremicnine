@@ -13,7 +13,6 @@ env:
   CLUSTER_NAME: "projektNepremicnineCluster"
   DEPLOYMENT_MANIFEST_PATH: |
     ./deployment.yaml
-    ./service.yaml
 
 jobs:
   build:
@@ -86,6 +85,9 @@ jobs:
           cluster-name: ${{ env.CLUSTER_NAME }}
           admin: 'false'
           use-kubelogin: 'true'
+        
+      - name: Get Kubernetes Pods
+        run: kubectl get pods
 
       # Step 5: Deploy application to AKS
       - name: Deploy to AKS
@@ -95,3 +97,6 @@ jobs:
           manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
           images: |
             ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
+          env:
+            - name: MONGO_URI
+              vlaue: ${{ secrets.MONGO_URI }}

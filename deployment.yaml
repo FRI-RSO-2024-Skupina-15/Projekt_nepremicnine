@@ -17,3 +17,16 @@ spec:
         image: kristofzupan/projekt-nepremicnine:latest
         ports:
         - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: projekt-nepremicnine
+spec:
+  type: LoadBalancer
+  selector:
+    app: projekt-nepremicnine
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
