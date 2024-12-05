@@ -53,6 +53,8 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
+          secrets: |
+            MONGO_URI: ${{ secrets.MONGO_URI }}
 
   #deploy:
   #  needs: docker-build-and-push
