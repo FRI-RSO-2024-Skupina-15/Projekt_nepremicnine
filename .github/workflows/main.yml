@@ -85,9 +85,6 @@ jobs:
           cluster-name: ${{ env.CLUSTER_NAME }}
           admin: 'false'
           use-kubelogin: 'true'
-        
-      - name: Get Kubernetes Pods
-        run: kubectl get pods
 
       # Step 5: Deploy application to AKS
       - name: Deploy to AKS
@@ -100,3 +97,6 @@ jobs:
       #    env:
       #      - name: MONGO_URI
       #        vlaue: ${{ secrets.MONGO_URI }}
+
+      - name: Get Kubernetes Pods
+        run: kubectl get pods
