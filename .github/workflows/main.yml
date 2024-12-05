@@ -56,15 +56,16 @@ jobs:
           build-args: |
             MONGO_URI: ${{ secrets.MONGO_URI }}
 
-  #deploy:
-  #  needs: docker-build-and-push
-  #  runs-on: ubuntu-latest
+  deploy:
+    needs: docker-build-and-push
+    runs-on: ubuntu-latest
 
-  #  steps:
-  #    - name: Checkout code
-  #      uses: actions/checkout@v4
-  #    
-  #    - name: Azure login
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Azure login
+        run: az login
   #      uses: azure/login@v1.4.6
   #      with:
   #        client-id: ${{ secrets.AZURE_CLIENT_ID }}
