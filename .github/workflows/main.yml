@@ -100,3 +100,6 @@ jobs:
 
       - name: Get Kubernetes Pods
         run: kubectl get pods
+
+      - name: Restart Rollout
+        run: kubectl rollout restart deployment
