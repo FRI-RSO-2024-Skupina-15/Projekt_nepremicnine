@@ -86,6 +86,12 @@ jobs:
           admin: 'false'
           use-kubelogin: 'true'
 
+      - name: Create MongoDB URI Secret
+      run: |
+        kubectl create secret generic mongo-uri-secret \
+          --from-literal=MONGO_URI=${{ secrets.MONGO_URI }} --dry-run=client -o yaml | kubectl apply -f -
+
+
       # Step 5: Deploy application to AKS
       - name: Deploy to AKS
         uses: Azure/k8s-deploy@v4

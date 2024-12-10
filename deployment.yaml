@@ -17,6 +17,12 @@ spec:
         image: kristofzupan/projekt-nepremicnine:latest
         ports:
         - containerPort: 3000
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongo-uri-secret
+              key: MONGO_URI
 ---
 apiVersion: v1
 kind: Service
