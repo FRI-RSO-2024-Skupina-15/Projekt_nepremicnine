@@ -13,12 +13,12 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-/*mongoose.connect(mongo_uri).then(() => {
+mongoose.connect(mongo_uri).then(() => {
     console.log('MongoDB connected');
   })
   .catch((err) => {
     console.log('MongoDB connection error:', err);
-  });*/
+  });
 
 /*mongoose.connect(mongo_uri).then(() => {
     const newProperty = Property({
@@ -53,7 +53,7 @@ app.use(cors());
   console.log('MongoDB connection error:', err);
 });*/
 
-/*app.get('/properties', (req, res) => {
+app.get('/properties', (req, res) => {
     const { minPrice, maxPrice, minArea, maxArea, bedrooms, bathrooms, type } = req.query;
 
     // Build the filter object based on provided parameters
@@ -74,16 +74,6 @@ app.use(cors());
       console.error('Error fetching properties:', err);
       res.status(500).send('Error retrieving properties'); // Handle errors
     });
-});*/
-
-const properties = [
-    { id: 1, name: "Cozy Apartment!!!!", location: "New York", price: 1200 },
-    { id: 2, name: "Luxury Villa!!!!!", location: "Los Angeles", price: 4500 },
-    { id: 3, name: "Beach House!!!!!", location: "Miami", price: 2500 }
-];
-
-app.get('/properties', (req, res) => {
-    res.json(properties);
 });
 
 /*
