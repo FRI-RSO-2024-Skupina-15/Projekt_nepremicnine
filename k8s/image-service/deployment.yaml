@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: image-storage-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  azureFile:
+    secretName: azure-storage-secret
+    shareName: image-uploads
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: image-storage-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: image-service
+  template:
+    metadata:
+      labels:
+        app: image-service
+    spec:
+      volumes:
+        - name: image-storage
+          persistentVolumeClaim:
+            claimName: image-storage-pvc
+      containers:
+      - name: image-service
+        image: kristofzupan/projekt-nepremicnine-image-service:latest
+        ports:
+        - containerPort: 3001
+        volumeMounts:
+          - name: image-storage
+            mountPath: /usr/src/app/uploads
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongo-uri-secret
+              key: MONGO_URI
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+          initialDelaySeconds: 15
+          periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: image-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3001

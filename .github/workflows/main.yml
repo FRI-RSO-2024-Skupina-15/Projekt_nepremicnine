@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [properties-service]
+        service: [properties-service, image-service]
 
     steps:
     - name: Checkout code
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [properties-service] 
+        service: [properties-service, image-service] 
 
     steps: 
       - name: Checkout code
@@ -57,7 +57,7 @@ jobs:
         with:
           context: ./services/${{ matrix.service }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine-${{ matrix.service }}:latest
           build-args: |
             MONGO_URI: ${{ secrets.MONGO_URI }}
 
