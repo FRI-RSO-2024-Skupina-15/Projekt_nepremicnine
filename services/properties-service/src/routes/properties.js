@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Property = require('../models/property');
 
-router.get('/properties', (req, res) => {
+router.get('/', (req, res) => {
     const { city, minPrice, maxPrice, minArea, maxArea, bedrooms, bathrooms, type } = req.query;
 
     // Build the filter object based on provided parameters
@@ -26,7 +26,7 @@ router.get('/properties', (req, res) => {
     });
 });
 
-router.post('/properties', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const property = new Property(req.body);
         await property.save();
