@@ -25,5 +25,14 @@ mongoose.connect(mongo_uri)
 app.use('/api/images', propertiesRoutes);
 app.use('/uploads', express.static('uploads'));
 
+app.get('/health', (req, res) => {
+    // Check MongoDB connection
+    if (mongoose.connection.readyState === 1) {
+        res.status(200).json({ status: 'healthy', database: 'connected' });
+    } else {
+        res.status(500).json({ status: 'unhealthy', database: 'disconnected' });
+    }
+});
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Properties service running on port ${PORT}`));
