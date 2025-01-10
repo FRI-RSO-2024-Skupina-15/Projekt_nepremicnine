@@ -19,4 +19,4 @@ ENV MONGO_URI=${MONGO_URI}
 EXPOSE 3000
 
 # Start the application
-CMD ["node", "app.js"]
+CMD ["node", "src/index.js"]
