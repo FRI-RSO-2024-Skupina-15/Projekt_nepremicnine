@@ -7,56 +7,56 @@ const PropertySchema = new Schema({
       required: true,
     },
     type: {
-      type: String, // e.g., 'House', 'Apartment'
+      type: String, 
       required: true,
     },
     location: {
       city: {
-        type: String, // e.g., 'Ljubljana'
+        type: String, 
         required: true,
       },
       country: {
-        type: String, // optional or can be added based on requirements
+        type: String, 
       },
     },
     size: {
-      type: Number, // in square meters, e.g., 100
+      type: Number, 
       required: true,
     },
     plotSize: {
-      type: Number, // in square meters, e.g., 781
+      type: Number, 
     },
     floors: {
-      type: Number, // number of floors, e.g., 3
+      type: Number, 
     },
     bedrooms: {
-      type: Number, // number of bedrooms
+      type: Number, 
     },
     bathrooms: {
-      type: Number, // number of bathrooms
+      type: Number, 
     },
     toilets: {
-        type: Number, // number of toilets
+        type: Number, 
     },
     constructionYear: {
-      type: Number, // year of construction
+      type: Number, 
       required: true,
     },
     renovationYear: {
-      type: Number, // year of last renovation
+      type: Number, 
     },
     energyRating: {
-      type: String, // e.g., 'C'
+      type: String, 
     },
     parkingSpaces: {
-      type: Number, // number of parking spaces
+      type: Number, 
     },
     amenities: {
-      type: [String], // e.g., ['Internet', 'Radiators', 'Air conditioning']
+      type: [String], 
     },
     contact: {
       name: {
-        type: String, // e.g., 'Ana Novak'
+        type: String, 
         required: true,
       },
       email: {

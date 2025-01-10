@@ -11,12 +11,13 @@ on:
 env:
   RESOURCE_GROUP: "projektNepremicnineResourceGroup"
   CLUSTER_NAME: "projektNepremicnineCluster"
-  DEPLOYMENT_MANIFEST_PATH: |
-    ./deployment.yaml
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [properties-service]
 
     steps:
     - name: Checkout code
@@ -28,11 +29,15 @@ jobs:
         node-version: 22
 
     - name: Install dependencies
+      working-directory: ./services/${{ matrix.service }}
       run: npm install
 
   docker-build-and-push:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [properties-service] 
 
     steps: 
       - name: Checkout code
@@ -50,6 +55,7 @@ jobs:
       - name: Build Docker image and push
         uses: docker/build-push-action@v6
         with:
+          context: ./services/${{ matrix.service }}
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
           build-args: |
@@ -97,7 +103,8 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           action: deploy
-          manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
+          manifests: |
+            k8s/properties-service/deployment.yaml
           images: |
             ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine:latest
       #    env:

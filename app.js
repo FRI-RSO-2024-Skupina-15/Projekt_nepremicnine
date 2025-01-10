@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const Property = require('./models/property');
+const Property = require('./services/properties-service/src/models/property');
 require('dotenv').config();
 
 const mongo_uri = process.env.MONGO_URI;
@@ -20,44 +20,12 @@ mongoose.connect(mongo_uri).then(() => {
     console.log('MongoDB connection error:', err);
   });
 
-/*mongoose.connect(mongo_uri).then(() => {
-    const newProperty = Property({
-        price: 360000,
-        type: "House",
-        location: {
-            city: 'Ljubljana',
-            country: 'Slovenia',
-        },
-        size: 196,
-        plotSize: 781,
-        floors: 3,
-        bedrooms: 5,
-        bathrooms: 1,
-        toilets: 1,
-        constructionYear: 1960,
-        renovationYear: 2022,
-        energyRating: 'C',
-        parkingSpaces: 3,
-        amenities: ['Internet', 'Radiators', 'Heat Pump', 'Storage'],
-        contact: {
-            name: 'Ana Novak',
-            email: 'ana.novak@email.com',
-            phone: '0123456789',
-        },
-    })
-
-    newProperty.save()
-    .then(() => console.log('New property saved'))
-    .catch((err) => console.log('Error saving property:', err));
-}).catch((err) => {
-  console.log('MongoDB connection error:', err);
-});*/
-
 app.get('/properties', (req, res) => {
-    const { minPrice, maxPrice, minArea, maxArea, bedrooms, bathrooms, type } = req.query;
+    const { city, minPrice, maxPrice, minArea, maxArea, bedrooms, bathrooms, type } = req.query;
 
     // Build the filter object based on provided parameters
     const filter = {};
+    if (city) filter['location.city'] = city;
     if (minPrice) filter.price = { $gte: minPrice };
     if (maxPrice) filter.price = { ...filter.price, $lte: maxPrice };
     if (minArea) filter.size = { $gte: minArea };
@@ -75,6 +43,12 @@ app.get('/properties', (req, res) => {
       res.status(500).send('Error retrieving properties'); // Handle errors
     });
 });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
+
 
 /*
 app.post('/property', async (req, res) => {
@@ -139,7 +113,35 @@ app.post('/property', async (req, res) => {
     }
 });*/
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+/*mongoose.connect(mongo_uri).then(() => {
+    const newProperty = Property({
+        price: 360000,
+        type: "House",
+        location: {
+            city: 'Ljubljana',
+            country: 'Slovenia',
+        },
+        size: 196,
+        plotSize: 781,
+        floors: 3,
+        bedrooms: 5,
+        bathrooms: 1,
+        toilets: 1,
+        constructionYear: 1960,
+        renovationYear: 2022,
+        energyRating: 'C',
+        parkingSpaces: 3,
+        amenities: ['Internet', 'Radiators', 'Heat Pump', 'Storage'],
+        contact: {
+            name: 'Ana Novak',
+            email: 'ana.novak@email.com',
+            phone: '0123456789',
+        },
+    })
+
+    newProperty.save()
+    .then(() => console.log('New property saved'))
+    .catch((err) => console.log('Error saving property:', err));
+}).catch((err) => {
+  console.log('MongoDB connection error:', err);
+});*/
