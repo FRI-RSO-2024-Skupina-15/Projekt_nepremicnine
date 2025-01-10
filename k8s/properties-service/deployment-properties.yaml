@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: properties-service
-        image: ${DOCKER_USERNAME}/projekt-nepremicnine-properties-service:latest
+        image: kristofzupan/projekt-nepremicnine-properties-service:latest
         ports:
         - containerPort: 3000
         env:

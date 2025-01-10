@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: image-service
-        image: ${DOCKER_USERNAME}/projekt-nepremicnine-image-service:latest
+        image: kristofzupan/projekt-nepremicnine-image-service:latest
         ports:
         - containerPort: 3001
         env:
