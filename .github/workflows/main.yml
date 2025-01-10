@@ -104,8 +104,8 @@ jobs:
         with:
           action: deploy
           manifests: |
-            k8s/properties-service/deployment.yaml
-            k8s/image-service/deployment.yaml
+            k8s/properties-service/deployment-properties.yaml
+            k8s/image-service/deployment-image.yaml
           images: |
             ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine-properties-service:latest
             ${{ secrets.DOCKER_USERNAME }}/projekt-nepremicnine-image-service:latest
