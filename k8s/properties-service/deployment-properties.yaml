@@ -1,20 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: projekt-nepremicnine
+  name: properties-service
+  labels:
+    app: properties-service
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: projekt-nepremicnine
+      app: properties-service
   template:
     metadata:
       labels:
-        app: projekt-nepremicnine
+        app: properties-service
     spec:
       containers:
-      - name: projekt-nepremicnine
-        image: kristofzupan/projekt-nepremicnine:latest
+      - name: properties-service
+        image: ${DOCKER_USERNAME}/projekt-nepremicnine-properties-service:latest
         ports:
         - containerPort: 3000
         env:
@@ -23,16 +25,28 @@ spec:
             secretKeyRef:
               name: mongo-uri-secret
               key: MONGO_URI
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: projekt-nepremicnine
+  name: properties-service
 spec:
-  type: LoadBalancer
   selector:
-    app: projekt-nepremicnine
+    app: properties-service
   ports:
-  - protocol: TCP
-    port: 80
+  - port: 80
     targetPort: 3000
+  type: ClusterIP
