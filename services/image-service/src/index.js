@@ -16,16 +16,16 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use('/api-docs', swagger.serve, swagger.setup);
+app.use('/api/images/docs', swagger.serve, swagger.setup);
 
 mongoose.connect(mongo_uri)
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log('MongoDB connection error:', err));
 
 app.use('/api/images', propertiesRoutes);
-app.use('/uploads', express.static('uploads'));
+app.use('/api/images/uploads', express.static('uploads'));
 
-app.get('/health', (req, res) => {
+app.get('/api/images/health', (req, res) => {
     // Check MongoDB connection
     if (mongoose.connection.readyState === 1) {
         res.status(200).json({ status: 'healthy', database: 'connected' });

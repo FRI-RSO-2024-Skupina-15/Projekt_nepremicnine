@@ -11,6 +11,10 @@ const options = {
     },
     servers: [
       {
+        url: 'http://72.146.60.142/api/images',
+        description: 'Production server',
+      },
+      {
         url: 'http://localhost:3001',
         description: 'Development server',
       },
