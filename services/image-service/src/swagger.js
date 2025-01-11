@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://72.146.60.142/api/images',
+        url: 'http://72.146.60.142',
         description: 'Production server',
       },
       {
