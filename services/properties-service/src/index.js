@@ -15,12 +15,24 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use('/api-docs', swagger.serve, swagger.setup);
+// Add root endpoint for basic health check
+app.get('/', (req, res) => {
+    res.json({ message: 'Properties Service API is running' });
+});
+
+// Add health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
+// Mount Swagger UI at /api/docs instead of /api-docs to match ingress
+app.use('/api/docs', swagger.serve, swagger.setup);
 
 mongoose.connect(mongo_uri)
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log('MongoDB connection error:', err));
 
+// Properties routes are already at /api/properties
 app.use('/api/properties', propertiesRoutes);
 
 const PORT = process.env.PORT || 3000;
