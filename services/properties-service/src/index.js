@@ -22,6 +22,11 @@ mongoose.connect(mongo_uri)
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log('MongoDB connection error:', err));
 
+app.use((req, res, next) => {
+    console.log('Incoming request:', req.method, req.url);
+    next();
+});
+
 // Properties routes are already at /api/properties
 app.use('/api/properties', propertiesRoutes);
 
