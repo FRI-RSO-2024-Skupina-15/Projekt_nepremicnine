@@ -3,31 +3,16 @@ kind: Ingress
 metadata:
   name: nepremicnine-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - path: /api/properties(.*)
-        pathType: ImplementationSpecific
+      - path: /api/properties
+        pathType: Prefix
         backend:
           service:
             name: properties-service
-            port:
-              number: 80
-      - path: /api/docs(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: properties-service
-            port:
-              number: 80
-      - path: /api/images(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: image-service
             port:
               number: 80
