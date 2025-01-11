@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Mount Swagger UI at /api/docs instead of /api-docs to match ingress
-app.use('/docs', swagger.serve, swagger.setup);
+app.use('/api/properties/docs', swagger.serve, swagger.setup);
 
 mongoose.connect(mongo_uri)
     .then(() => console.log('MongoDB connected'))
