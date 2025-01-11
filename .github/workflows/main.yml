@@ -119,5 +119,5 @@ jobs:
 
       - name: Restart Rollout
         run: |
-          kubectl rollout restart deployment/projekt-nepremicnine
+          kubectl rollout restart deployment/properties-service
           kubectl rollout restart deployment/image-service
