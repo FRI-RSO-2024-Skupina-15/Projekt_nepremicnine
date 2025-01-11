@@ -150,7 +150,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/health', (req, res) => {
-    res.json({ status: 'healthy', timestamp: new Date().toISOString() });
+    res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
 module.exports = router;
