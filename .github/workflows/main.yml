@@ -97,7 +97,11 @@ jobs:
           kubectl create secret generic mongo-uri-secret \
             --from-literal=MONGO_URI=${{ secrets.MONGO_URI }} --dry-run=client -o yaml | kubectl apply -f -
 
-
+      - name: Deploy Storage Configuration
+        run: |
+          kubectl apply -f k8s/image-service/azure-file-storage-class.yaml
+          kubectl apply -f k8s/image-service/azure-file-pvc.yaml
+        
       # Step 5: Deploy application to AKS
       - name: Deploy to AKS
         uses: Azure/k8s-deploy@v4

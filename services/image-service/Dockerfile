@@ -4,6 +4,8 @@ FROM node:22
 # Set working directory
 WORKDIR /usr/src/app
 
+RUN mkdir -p uploads && chmod 777 uploads   
+
 # Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install

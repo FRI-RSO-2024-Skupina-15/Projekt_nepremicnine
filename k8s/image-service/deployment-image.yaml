@@ -5,7 +5,7 @@ metadata:
   labels:
     app: image-service
 spec:
-  replicas: 1  # Changed to 1 replica since we're using hostPath
+  replicas: 2  # Now we can safely use multiple replicas
   selector:
     matchLabels:
       app: image-service
@@ -27,7 +27,7 @@ spec:
               key: MONGO_URI
         volumeMounts:
         - name: uploads
-          mountPath: /app/uploads
+          mountPath: /usr/src/app/uploads  # Updated to match Dockerfile WORKDIR
         resources:
           requests:
             memory: "128Mi"
@@ -43,9 +43,8 @@ spec:
           periodSeconds: 10
       volumes:
       - name: uploads
-        hostPath:    # Using hostPath instead of PVC
-          path: /mnt/data/uploads
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: image-uploads-pvc
 ---
 apiVersion: v1
 kind: Service
