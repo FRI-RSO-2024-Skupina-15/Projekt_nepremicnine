@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Property = require('../models/property');
 
+NOTIFICATION_FUNC_URL="https://projneprem-notifications.azurewebsites.net/api/notify"
+
 /**
  * @swagger
  * components:
@@ -143,6 +145,16 @@ router.post('/', async (req, res) => {
     try {
         const property = new Property(req.body);
         await property.save();
+
+        // Trigger notification function
+        try {
+            await axios.post(NOTIFICATION_FUNC_URL, property);
+        } catch (notificationError) {
+            console.error('Failed to send notification:', notificationError);
+            // Don't fail the request if notification fails
+        }
+
+        
         res.status(201).json(property);
     } catch (err) {
         res.status(400).json({ error: err.message });
