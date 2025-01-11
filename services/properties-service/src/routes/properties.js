@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Property = require('../models/property');
+const axios = require('axios');
 
 NOTIFICATION_FUNC_URL="https://projneprem-notifications.azurewebsites.net/api/notify"
 
