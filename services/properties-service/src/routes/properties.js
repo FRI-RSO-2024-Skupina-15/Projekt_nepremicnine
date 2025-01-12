@@ -160,6 +160,52 @@ router.post('/', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/properties/{id}:
+ *   delete:
+ *     summary: Delete a property by ID
+ *     tags: [Properties]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Property ID
+ *     responses:
+ *       200:
+ *         description: Property deleted successfully
+ *       404:
+ *         description: Property not found
+ *       500:
+ *         description: Server error
+ */
+router.delete('/:id', async (req, res) => {
+    try {
+        const property = await Property.findByIdAndDelete(req.params.id);
+        if (!property) {
+            return res.status(404).json({ error: 'Property not found' });
+        }
+
+        // Optionally trigger notification for property deletion
+        try {
+            await axios.post(process.env.NOTIFICATION_FUNC_URL, {
+                ...property.toObject(),
+                action: 'deletion'
+            });
+        } catch (notificationError) {
+            console.error('Failed to send deletion notification:', notificationError);
+            // Don't fail the request if notification fails
+        }
+
+        res.json({ message: 'Property deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting property:', err);
+        res.status(500).json({ error: 'Error deleting property' });
+    }
+});
+
 router.get('/health', (req, res) => {
     res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
