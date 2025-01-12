@@ -188,17 +188,6 @@ router.delete('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Property not found' });
         }
 
-        // Optionally trigger notification for property deletion
-        try {
-            await axios.post(process.env.NOTIFICATION_FUNC_URL, {
-                ...property.toObject(),
-                action: 'deletion'
-            });
-        } catch (notificationError) {
-            console.error('Failed to send deletion notification:', notificationError);
-            // Don't fail the request if notification fails
-        }
-
         res.json({ message: 'Property deleted successfully' });
     } catch (err) {
         console.error('Error deleting property:', err);
