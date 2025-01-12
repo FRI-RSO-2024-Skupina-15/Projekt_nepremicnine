@@ -195,8 +195,38 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-router.get('/health', (req, res) => {
-    res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
+router.get('/health', async (req, res) => {
+    try {
+        // Check MongoDB connection
+        const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+        
+        // Check notification service
+        let notificationStatus = 'unknown';
+        try {
+            const response = await axios.get(process.env.NOTIFICATION_FUNC_URL);
+            notificationStatus = response.status === 200 ? 'healthy' : 'unhealthy';
+        } catch (error) {
+            notificationStatus = 'unhealthy';
+        }
+
+        const health = {
+            status: dbStatus === 'connected' && notificationStatus === 'healthy' ? 'healthy' : 'unhealthy',
+            timestamp: new Date().toISOString(),
+            services: {
+                database: dbStatus,
+                notification: notificationStatus
+            },
+            version: process.env.npm_package_version || '1.0.0',
+            uptime: process.uptime()
+        };
+
+        res.status(health.status === 'healthy' ? 200 : 503).json(health);
+    } catch (error) {
+        res.status(503).json({
+            status: 'unhealthy',
+            error: error.message
+        });
+    }
 });
 
 module.exports = router;

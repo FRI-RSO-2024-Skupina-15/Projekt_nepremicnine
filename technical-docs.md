@@ -168,6 +168,24 @@ The project uses GitHub Actions for automated deployment:
    kubectl apply -f k8s/ingress.yaml
    ```
 
+### Azure function Deployment for property notifications
+
+1. Create function
+```
+ az functionapp create --resource-group projektNepremicnineResourceGroup --consumption-plan-location westeurope --runtime node --runtime-version 18 --functions-version 4 --name projneprem-notifications --storage-account projnepremstore --os-type Linux
+```
+
+2. Setup config
+```
+az functionapp config appsettings set  --name projneprem-notifications  --resource-group projektNepremicnineResourceGroup  --settings SENDGRID_API_KEY=<API_KEY>  NOTIFICATION_EMAIL_TO=<EMAIL_TO>  NOTIFICATION_EMAIL_FROM=<EMAIL_FROM>
+```
+
+3. Save the url of the app into Github secrets
+```
+https://projneprem-notifications.azurewebsites.net/api/propertynotification?code=<FUNCTION_KEY>
+```
+
+
 ## API Documentation
 
 ### Properties Service API

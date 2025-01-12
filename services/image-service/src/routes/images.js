@@ -205,4 +205,38 @@ router.delete('/:imageId', async (req, res) => {
     }
 });
 
+router.get('/health', async (req, res) => {
+    try {
+        // Check MongoDB connection
+        const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+        
+        // Check file system access
+        let storageStatus = 'unknown';
+        try {
+            await fs.access('./uploads');
+            storageStatus = 'healthy';
+        } catch (error) {
+            storageStatus = 'unhealthy';
+        }
+
+        const health = {
+            status: dbStatus === 'connected' && storageStatus === 'healthy' ? 'healthy' : 'unhealthy',
+            timestamp: new Date().toISOString(),
+            services: {
+                database: dbStatus,
+                storage: storageStatus
+            },
+            version: process.env.npm_package_version || '1.0.0',
+            uptime: process.uptime()
+        };
+
+        res.status(health.status === 'healthy' ? 200 : 503).json(health);
+    } catch (error) {
+        res.status(503).json({
+            status: 'unhealthy',
+            error: error.message
+        });
+    }
+});
+
 module.exports = router;
