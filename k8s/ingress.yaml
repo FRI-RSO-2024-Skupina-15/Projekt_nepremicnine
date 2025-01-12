@@ -28,3 +28,10 @@ spec:
             name: frontend-service
             port:
               number: 80
+      - path: /kibana
+        pathType: Prefix
+        backend:
+          service:
+            name: kibana
+            port:
+              number: 80

@@ -3,6 +3,36 @@ const router = express.Router();
 const Property = require('../models/property');
 const axios = require('axios');
 const mongoose = require('mongoose');
+const winston = require('winston');
+
+// Configure Winston logger
+const logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  defaultMeta: { service: 'properties-service' },
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      )
+    })
+  ]
+});
+
+// Request logging middleware
+router.use((req, res, next) => {
+  logger.info('Incoming request', {
+    method: req.method,
+    path: req.path,
+    query: req.query,
+    ip: req.ip,
+    userAgent: req.get('user-agent')
+  });
+  next();
+});
 
 /**
  * @swagger
