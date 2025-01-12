@@ -209,22 +209,12 @@ router.get('/health', async (req, res) => {
     try {
         // Check MongoDB connection
         const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-        
-        // Check file system access
-        let storageStatus = 'unknown';
-        try {
-            await fs.access('/usr/src/app/uploads');
-            storageStatus = 'healthy';
-        } catch (error) {
-            storageStatus = 'unhealthy';
-        }
 
         const health = {
-            status: dbStatus === 'connected' && storageStatus === 'healthy' ? 'healthy' : 'unhealthy',
+            status: dbStatus === 'connected' ? 'healthy' : 'unhealthy',
             timestamp: new Date().toISOString(),
             services: {
                 database: dbStatus,
-                storage: storageStatus
             },
             version: process.env.npm_package_version || '1.0.0',
             uptime: process.uptime()

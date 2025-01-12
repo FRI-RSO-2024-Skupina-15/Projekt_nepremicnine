@@ -207,6 +207,7 @@ router.get('/health', async (req, res) => {
             const response = await axios.get(process.env.NOTIFICATION_FUNC_URL);
             notificationStatus = response.status === 200 ? 'healthy' : 'unhealthy';
         } catch (error) {
+            console.log(error)
             notificationStatus = 'unhealthy';
         }
 
