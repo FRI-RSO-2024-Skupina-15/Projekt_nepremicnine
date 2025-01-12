@@ -18,5 +18,26 @@ spec:
         env:
         - name: ELASTICSEARCH_HOSTS
           value: http://elasticsearch:9200
+        - name: SERVER_BASEPATH
+          value: /kibana
+        - name: SERVER_REWRITEBASEPATH
+          value: "true"
         ports:
         - containerPort: 5601
+        resources:
+          limits:
+            memory: 1Gi
+          requests:
+            memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kibana
+spec:
+  selector:
+    app: kibana
+  ports:
+  - port: 80
+    targetPort: 5601
+  type: ClusterIP
