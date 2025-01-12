@@ -201,22 +201,12 @@ router.get('/health', async (req, res) => {
         // Check MongoDB connection
         const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
         
-        // Check notification service
-        let notificationStatus = 'unknown';
-        try {
-            const response = await axios.get(process.env.NOTIFICATION_FUNC_URL);
-            notificationStatus = response.status === 200 ? 'healthy' : 'unhealthy';
-        } catch (error) {
-            console.log(error)
-            notificationStatus = 'unhealthy';
-        }
 
         const health = {
-            status: dbStatus === 'connected' && notificationStatus === 'healthy' ? 'healthy' : 'unhealthy',
+            status: dbStatus === 'connected' ? 'healthy' : 'unhealthy',
             timestamp: new Date().toISOString(),
             services: {
                 database: dbStatus,
-                notification: notificationStatus
             },
             version: process.env.npm_package_version || '1.0.0',
             uptime: process.uptime()
