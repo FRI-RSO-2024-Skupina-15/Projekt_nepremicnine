@@ -25,6 +25,11 @@ spec:
             secretKeyRef:
               name: mongo-uri-secret
               key: MONGO_URI
+        - name: NOTIFICATION_FUNC_URL
+          valueFrom:
+            secretKeyRef:
+              name: notification-secrets
+              key: NOTIFICATION_FUNC_URL
         resources:
           requests:
             memory: "128Mi"

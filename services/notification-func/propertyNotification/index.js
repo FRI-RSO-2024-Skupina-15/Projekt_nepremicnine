@@ -1,16 +1,17 @@
 const sgMail = require('@sendgrid/mail');
 
 module.exports = async function (context, req) {
+    context.log('JavaScript HTTP trigger function processed a request.');
+
     try {
-        // Set SendGrid API key
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
+        
         const property = req.body;
-
+        
         if (!property) {
             context.res = {
                 status: 400,
-                body: "Please provide property information in the request body"
+                body: "Please provide property information"
             };
             return;
         }
@@ -24,8 +25,6 @@ module.exports = async function (context, req) {
             Size: ${property.size}m²
             Bedrooms: ${property.bedrooms || 'N/A'}
             Contact: ${property.contact.name} (${property.contact.email})
-            
-            View more details on our website.
         `;
 
         const msg = {
@@ -36,16 +35,16 @@ module.exports = async function (context, req) {
         };
 
         await sgMail.send(msg);
-
+        
         context.res = {
             status: 200,
             body: "Notification sent successfully"
         };
     } catch (error) {
-        context.log.error('Error sending notification:', error);
+        context.log.error('Error:', error);
         context.res = {
             status: 500,
-            body: "Failed to send notification"
+            body: `Failed to send notification: ${error.message}`
         };
     }
 }

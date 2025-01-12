@@ -96,6 +96,12 @@ jobs:
         run: |
           kubectl create secret generic mongo-uri-secret \
             --from-literal=MONGO_URI=${{ secrets.MONGO_URI }} --dry-run=client -o yaml | kubectl apply -f -
+      
+      - name: Create Notification URI Secret
+        run: |
+          kubectl create secret generic notification-secrets \
+            --from-literal=NOTIFICATION_FUNC_URL=${{ secrets.NOTIFICATION_FUNC_URL }} --dry-run=client -o yaml | kubectl apply -f -
+
 
       - name: Deploy Storage Configuration
         run: |
