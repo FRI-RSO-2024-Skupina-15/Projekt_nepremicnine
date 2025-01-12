@@ -213,7 +213,7 @@ router.get('/health', async (req, res) => {
         // Check file system access
         let storageStatus = 'unknown';
         try {
-            await fs.access('./uploads');
+            await fs.access('/usr/src/app/uploads');
             storageStatus = 'healthy';
         } catch (error) {
             storageStatus = 'unhealthy';

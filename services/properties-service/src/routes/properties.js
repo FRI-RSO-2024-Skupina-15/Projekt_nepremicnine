@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Property = require('../models/property');
 const axios = require('axios');
+const mongoose = require('mongoose');
 
 /**
  * @swagger
